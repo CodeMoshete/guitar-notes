@@ -4,6 +4,9 @@ using Utils;
 
 public class WheelPart : MonoBehaviour
 {
+    private readonly Color COLOR_HOVER = new Color(1f, 1f, 1f, 1f);
+    private readonly Color COLOR_NO_HOVER = new Color(0f, 0f, 0f, 0f);
+
     public Text noteLabel;
     public string Key
     {
@@ -16,6 +19,7 @@ public class WheelPart : MonoBehaviour
     private GameObject offImage;
     private GameObject keyIndicator;
     private Button selectButton;
+    private Button SampleButton;
     private Engine engine;
 
     public void Awake()
@@ -23,10 +27,25 @@ public class WheelPart : MonoBehaviour
         onImage = UnityUtils.FindGameObject(gameObject, "On");
         offImage = UnityUtils.FindGameObject(gameObject, "Off");
         keyIndicator = UnityUtils.FindGameObject(gameObject, "KeyIndicator");
+        SampleButton = UnityUtils.FindGameObject(gameObject, "SampleButton").GetComponent<Button>();
+        SampleButton.onClick.AddListener(OnSamplePressed);
+        SampleButton.image.color = COLOR_NO_HOVER;
+        SampleButton.GetComponent<UIHoverListener>().AddHoverListener(OnSampleHover);
         SetIsKey(false);
         selectButton = GetComponentInChildren<Button>();
         selectButton.onClick.AddListener(OnKeyButtonPressed);
         engine = GameObject.Find("Engine").GetComponent<Engine>();
+    }
+
+    private void OnSamplePressed()
+    {
+        engine.SampleNote(this);
+    }
+
+    private void OnSampleHover(bool isHovering)
+    {
+        Color hoverColor = isHovering ? COLOR_HOVER : COLOR_NO_HOVER;
+        SampleButton.image.color = hoverColor;
     }
 
     private void OnKeyButtonPressed()

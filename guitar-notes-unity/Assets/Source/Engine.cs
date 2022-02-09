@@ -56,6 +56,23 @@ public class Engine : MonoBehaviour
         resultTimeout = 3f;
     }
 
+    public void SampleNote(WheelPart selectedNote)
+    {
+        NoteModel tmpModel = null;
+
+        for (int i = 0, count = NoteModels.Count; i < count; ++i)
+        {
+            if (NoteModels[i].NoteName == selectedNote.noteLabel.text)
+            {
+                tmpModel = NoteModels[i];
+                break;
+            }
+        }
+
+        AudioSource.clip = tmpModel.OctaveNotes[currentOctaveIndex];
+        AudioSource.Play();
+    }
+
     private void Update()
     {
         if (resultTimeout > 0)
