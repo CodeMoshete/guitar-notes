@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffb3dfb76d0d6bc439350cc0a319643c, type: 3}
+  m_Name: Notes
+  m_EditorClassIdentifier: 
+  NoteModels:
+  - NoteName: Ab
+    OctaveNotes:
+    - {fileID: 8300000, guid: 9b64a788ae5b8e04a8a1f470034dfced, type: 3}
+    - {fileID: 8300000, guid: 8449bdf27aecb6943b4d343c7a952b66, type: 3}
+    - {fileID: 8300000, guid: 0ea43e9d706e08349998dd96c229e7d0, type: 3}
+    - {fileID: 8300000, guid: 541417bc910e21f4588c775742f2ee86, type: 3}
+  - NoteName: A
+    OctaveNotes:
+    - {fileID: 8300000, guid: 58e31d20b96be034ba3813349475e941, type: 3}
+    - {fileID: 8300000, guid: 59004259ab8d4d9448a3ac88ecfb099e, type: 3}
+    - {fileID: 8300000, guid: 10735419a1dab774da08a7686fa16953, type: 3}
+    - {fileID: 8300000, guid: c8291d31f0d3ab74f9cf8db6780ee925, type: 3}
+  - NoteName: Bb
+    OctaveNotes:
+    - {fileID: 8300000, guid: 0b083dbc2a93301499017ea2e01c0037, type: 3}
+    - {fileID: 8300000, guid: 2a59a945220c125448f48e1b03ea7531, type: 3}
+    - {fileID: 8300000, guid: 1144896d9f5844b4a92ad40375ad3cc1, type: 3}
+    - {fileID: 8300000, guid: 0c6f40f2b14267b408d65788e86db247, type: 3}
+  - NoteName: B
+    OctaveNotes:
+    - {fileID: 8300000, guid: 22641ac29af221741b05912a2efd77b6, type: 3}
+    - {fileID: 8300000, guid: 442ce1fc64ac8bf4991a2fb8bd76b054, type: 3}
+    - {fileID: 8300000, guid: 07fef602f328259469078b4cc5d3ce1b, type: 3}
+    - {fileID: 8300000, guid: f206ab470c17f7a48820a780ec7fa963, type: 3}
+  - NoteName: C
+    OctaveNotes:
+    - {fileID: 8300000, guid: a324a0142d2ab1440a269933a23277cf, type: 3}
+    - {fileID: 8300000, guid: 3e4552a77c6ed36488a4aafe39d5059d, type: 3}
+    - {fileID: 8300000, guid: f60ec8d1ca76c8c48a777f53afea86aa, type: 3}
+    - {fileID: 8300000, guid: c5f33aaa693f57c42abcf4d3910268fb, type: 3}
+  - NoteName: Db
+    OctaveNotes:
+    - {fileID: 8300000, guid: 6cf39894eef8a504c831ff18242e8255, type: 3}
+    - {fileID: 8300000, guid: 393f9edccdf133a49955e70be34c870e, type: 3}
+    - {fileID: 8300000, guid: a3bb366f4db110245afbb838ca536112, type: 3}
+    - {fileID: 8300000, guid: cdf27463b7492d142b5bc07aaa94a428, type: 3}
+  - NoteName: D
+    OctaveNotes:
+    - {fileID: 8300000, guid: ef7a9efc277986b43a8c7527f62de3ab, type: 3}
+    - {fileID: 8300000, guid: 196947e051405624bbf40c69c247bc6d, type: 3}
+    - {fileID: 8300000, guid: 13ad12f7ffab4e34d93659ba7565067c, type: 3}
+    - {fileID: 8300000, guid: 274e199680acbd44da1ad4dcc3356133, type: 3}
+  - NoteName: Eb
+    OctaveNotes:
+    - {fileID: 8300000, guid: b57494415e5c24f4dbe8b1089c3c08f0, type: 3}
+    - {fileID: 8300000, guid: 0267d8b0663835f4dab6d1a25ef93ac4, type: 3}
+    - {fileID: 8300000, guid: 52437c85ef7ea5641aa5e4219a6d7d9a, type: 3}
+  - NoteName: E
+    OctaveNotes:
+    - {fileID: 8300000, guid: 762781ba84da0fe419766fcf92bcc26c, type: 3}
+    - {fileID: 8300000, guid: 99f76fd2b513cbd4db8a4d1cdcd1ab04, type: 3}
+    - {fileID: 8300000, guid: 8214bedd55eb7b742868cb54116e19e5, type: 3}
+    - {fileID: 8300000, guid: c0009184046cb2c4dba1aca1a5fc7861, type: 3}
+  - NoteName: F
+    OctaveNotes:
+    - {fileID: 8300000, guid: 38c91f33eb34ee34bb5b3d7398b3ab04, type: 3}
+    - {fileID: 8300000, guid: e7e8552184542d54cab713acb09ccaa1, type: 3}
+    - {fileID: 8300000, guid: 6f3c5206ea81d8c41badb06da11de08d, type: 3}
+    - {fileID: 8300000, guid: 64cba600c9b8e0d4c806543ca10a6444, type: 3}
+  - NoteName: F#
+    OctaveNotes:
+    - {fileID: 8300000, guid: 7d505bf53aa8301418f28af2c2f72d1e, type: 3}
+    - {fileID: 8300000, guid: 6998f9e976dcd824d963e0fae0d08dfc, type: 3}
+    - {fileID: 8300000, guid: 9da1bba8d43a7d04b8dd0b0cd9b644e3, type: 3}
+    - {fileID: 8300000, guid: e55e536517c47e34e93dd7f49f74ce57, type: 3}
+  - NoteName: G
+    OctaveNotes:
+    - {fileID: 8300000, guid: d0358201992aa6a408548bcbc133fa0f, type: 3}
+    - {fileID: 8300000, guid: b88950fd8b4551a419eeb9d59e423059, type: 3}
+    - {fileID: 8300000, guid: 54bf207a8d56daf4fabb87db1e768be4, type: 3}
+    - {fileID: 8300000, guid: 6febcda55ab9a994986cba7b1c45f727, type: 3}
