@@ -1,91 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Engine : MonoBehaviour
 {
-    public List<WheelPart> WheelParts;
-    public List<NoteModel> NoteModels;
-    public Button ReplayButton;
-    public AudioSource AudioSource;
-    public GameObject CorrectLabel;
-    public GameObject IncorrectLabel;
-
-    private NoteModel currentNote;
-    private WheelPart currentNotePart;
-    private int currentOctaveIndex;
-
-    private float resultTimeout = 0f;
+    public NotesCollection NoteCollection;
+    private IState currentState;
 
     private void Start()
     {
-        ReplayButton.onClick.AddListener(playNote);
-        selectRandomNote();
+        SwitchToNoteState();
     }
 
-    private void selectRandomNote()
+    private void SwitchToNoteState()
     {
-        currentNote = NoteModels[Random.Range(0, NoteModels.Count - 1)];
-        currentOctaveIndex = Random.Range(0, currentNote.OctaveNotes.Count - 1);
+        Debug.Log("Switching to note state");
+        SwitchState(new NoteState(), SwitchToIntervalState);
+    }
 
-        for (int i = 0, count = WheelParts.Count; i < count; ++i)
+    private void SwitchToIntervalState()
+    {
+        Debug.Log("Switching to interval state");
+        SwitchState(new IntervalState(), SwitchToNoteState);
+    }
+
+    private void SwitchState(IState nextState, Action nextTransition)
+    {
+        if (currentState != null)
         {
-            if (WheelParts[i].noteLabel.text == currentNote.NoteName)
-            {
-                currentNotePart = WheelParts[i];
-                break;
-            }
+            currentState.Dispose();
         }
-
-        playNote();
-    }
-
-    private void playNote()
-    {
-        AudioSource.clip = currentNote.OctaveNotes[currentOctaveIndex];
-        AudioSource.Play();
-    }
-
-    public void SelectNote(WheelPart selectedNote)
-    {
-        ReplayButton.gameObject.SetActive(false);
-        bool isCorrect = selectedNote == currentNotePart;
-        CorrectLabel.SetActive(isCorrect);
-        IncorrectLabel.SetActive(!isCorrect);
-        currentNotePart.SetIsKey(true);
-        resultTimeout = 3f;
-    }
-
-    public void SampleNote(WheelPart selectedNote)
-    {
-        NoteModel tmpModel = null;
-
-        for (int i = 0, count = NoteModels.Count; i < count; ++i)
-        {
-            if (NoteModels[i].NoteName == selectedNote.noteLabel.text)
-            {
-                tmpModel = NoteModels[i];
-                break;
-            }
-        }
-
-        AudioSource.clip = tmpModel.OctaveNotes[currentOctaveIndex];
-        AudioSource.Play();
-    }
-
-    private void Update()
-    {
-        if (resultTimeout > 0)
-        {
-            resultTimeout -= Time.deltaTime;
-            if (resultTimeout <= 0)
-            {
-                CorrectLabel.SetActive(false);
-                IncorrectLabel.SetActive(false);
-                ReplayButton.gameObject.SetActive(true);
-                currentNotePart.SetIsKey(false);
-                selectRandomNote();
-            }
-        }
+        currentState = nextState;
+        currentState.Initialize(NoteCollection, nextTransition);
     }
 }

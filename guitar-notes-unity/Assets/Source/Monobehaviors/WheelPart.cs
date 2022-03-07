@@ -20,7 +20,6 @@ public class WheelPart : MonoBehaviour
     private GameObject keyIndicator;
     private Button selectButton;
     private Button SampleButton;
-    private Engine engine;
 
     public void Awake()
     {
@@ -34,12 +33,11 @@ public class WheelPart : MonoBehaviour
         SetIsKey(false);
         selectButton = GetComponentInChildren<Button>();
         selectButton.onClick.AddListener(OnKeyButtonPressed);
-        engine = GameObject.Find("Engine").GetComponent<Engine>();
     }
 
     private void OnSamplePressed()
     {
-        engine.SampleNote(this);
+        Service.EventManager.SendEvent(EventId.OnSampleNotePressed, this);
     }
 
     private void OnSampleHover(bool isHovering)
@@ -50,7 +48,7 @@ public class WheelPart : MonoBehaviour
 
     private void OnKeyButtonPressed()
     {
-        engine.SelectNote(this);
+        Service.EventManager.SendEvent(EventId.OnNoteSelected, this);
     }
 
     public void SetActive(bool isActive)

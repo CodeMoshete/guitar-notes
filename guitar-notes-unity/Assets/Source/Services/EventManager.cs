@@ -2,19 +2,8 @@
 
 public enum EventId
 {
-    ShowTriggerPrompt,
-    ShowPromptText,
-    HidePromptText,
-    DebugToggleJobs,
-    DebugToggleConsole,
-    ShowDialogueText,
-    DialogueTextDismissed,
-    ShowChoiceDialogue,
-    ChoiceDialogueDismissed,
-    SetControlsEnabled,
-    SetNewControlScheme,
-    TogglePilotingControls,
-    LogDebugMessage
+    OnSampleNotePressed,
+    OnNoteSelected
 }
 
 public delegate bool EventCallback(object cookie);
