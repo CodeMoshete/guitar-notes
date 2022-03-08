@@ -4,6 +4,8 @@ using UnityEngine;
 public class NoteState : IState
 {
     private const string MAJOR_SCALE_RESOURCE = "NotesUI";
+    private const float RESULT_TIME = 3f;
+
     private GameObject majorScaleWheel;
     private NotesCollection noteCollection;
     private MajorScalesWheelUI wheelUi;
@@ -24,11 +26,11 @@ public class NoteState : IState
         wheelUi.SwitchStateButton.onClick.AddListener(SwitchState);
         Service.EventManager.AddListener(EventId.OnNoteSelected, OnNoteSelected);
         Service.EventManager.AddListener(EventId.OnSampleNotePressed, OnSampleNotePressed);
-        selectRandomNote();
+        SelectRandomNote();
         Service.UpdateManager.AddObserver(OnUpdate);
     }
 
-    private void selectRandomNote()
+    private void SelectRandomNote()
     {
         currentNote = noteCollection.NoteModels[UnityEngine.Random.Range(0, noteCollection.NoteModels.Count - 1)];
         currentOctaveIndex = UnityEngine.Random.Range(0, currentNote.OctaveNotes.Count - 1);
@@ -77,7 +79,7 @@ public class NoteState : IState
         wheelUi.CorrectLabel.SetActive(isCorrect);
         wheelUi.IncorrectLabel.SetActive(!isCorrect);
         currentNotePart.SetIsKey(true);
-        resultTimeout = 3f;
+        resultTimeout = RESULT_TIME;
     }
 
     public void SampleNote(WheelPart selectedNote)
@@ -108,7 +110,7 @@ public class NoteState : IState
                 wheelUi.IncorrectLabel.SetActive(false);
                 wheelUi.ReplayButton.gameObject.SetActive(true);
                 currentNotePart.SetIsKey(false);
-                selectRandomNote();
+                SelectRandomNote();
             }
         }
     }
@@ -117,5 +119,7 @@ public class NoteState : IState
     {
         GameObject.Destroy(majorScaleWheel);
         Service.UpdateManager.RemoveObserver(OnUpdate);
+        Service.EventManager.RemoveListener(EventId.OnNoteSelected, OnNoteSelected);
+        Service.EventManager.RemoveListener(EventId.OnSampleNotePressed, OnSampleNotePressed);
     }
 }
