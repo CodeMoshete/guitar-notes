@@ -8,6 +8,7 @@ public class IntervalsWheelUI : MonoBehaviour
     public Button ReplayBaseButton;
     public Button ReplayIntervalButton;
     public Button SwitchStateButton;
+    public Toggle IncludeAllIntervalsToggle;
     public AudioSource AudioSourceBase;
     public AudioSource AudioSourceInterval;
     public GameObject CorrectLabel;

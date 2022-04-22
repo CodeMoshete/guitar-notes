@@ -6,26 +6,32 @@ public class IntervalState : IState
     private const string INTERVAL_RESOURCE = "IntervalsUI";
     private const float RESULT_TIME = 3f;
     private const float INTERVAL_PLAY_TIME = 1f;
+    private readonly int[] MAJOR_INTERVAL_INDECIES = new int[] {0, 2, 4, 5, 7, 9, 11};
 
-    private GameObject majorScaleWheel;
+    private GameObject intervalWheel;
     private NotesCollection noteCollection;
-    private MajorScalesWheelUI wheelUi;
+    private IntervalsWheelUI wheelUi;
     private NoteModel currentNote;
-    private WheelPart currentNotePart;
+    private WheelPart currentIntervalPart;
     private int currentOctaveIndex;
+    private NoteModel currentIntervalNote;
+    private int currentIntervalIndex;
     private Action onSwitchState;
 
     private float resultTimeout = 0f;
-    private float intervalPlayTimeout = 0f;
+    private bool includeAllIntervals;
 
     public void Initialize(NotesCollection noteCollection, Action onSwitchState)
     {
         this.onSwitchState = onSwitchState;
         this.noteCollection = noteCollection;
-        majorScaleWheel = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(INTERVAL_RESOURCE));
-        wheelUi = majorScaleWheel.GetComponent<MajorScalesWheelUI>();
-        wheelUi.ReplayButton.onClick.AddListener(PlayNote);
+        intervalWheel = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(INTERVAL_RESOURCE));
+        wheelUi = intervalWheel.GetComponent<IntervalsWheelUI>();
+        wheelUi.ReplayIntervalButton.onClick.AddListener(PlayInterval);
+        wheelUi.ReplayBaseButton.onClick.AddListener(PlayBase);
         wheelUi.SwitchStateButton.onClick.AddListener(SwitchState);
+        wheelUi.IncludeAllIntervalsToggle.onValueChanged.AddListener(OnIncludeIntervalsToggled);
+        includeAllIntervals = wheelUi.IncludeAllIntervalsToggle.isOn;
         Service.EventManager.AddListener(EventId.OnNoteSelected, OnNoteSelected);
         Service.EventManager.AddListener(EventId.OnSampleNotePressed, OnSampleNotePressed);
         SelectRandomInterval();
@@ -37,22 +43,32 @@ public class IntervalState : IState
         currentNote = noteCollection.NoteModels[UnityEngine.Random.Range(0, noteCollection.NoteModels.Count - 1)];
         currentOctaveIndex = UnityEngine.Random.Range(0, currentNote.OctaveNotes.Count - 1);
 
-        for (int i = 0, count = wheelUi.WheelParts.Count; i < count; ++i)
+        if (includeAllIntervals)
         {
-            if (wheelUi.WheelParts[i].noteLabel.text == currentNote.NoteName)
-            {
-                currentNotePart = wheelUi.WheelParts[i];
-                break;
-            }
+            currentIntervalIndex = UnityEngine.Random.Range(0, 12);
+        }
+        else
+        {
+            int randomSelectionIndex = UnityEngine.Random.Range(0, MAJOR_INTERVAL_INDECIES.Length);
+            currentIntervalIndex = MAJOR_INTERVAL_INDECIES[randomSelectionIndex];
         }
 
-        PlayNote();
+        currentIntervalNote = GetNodeModelForInterval(currentNote, currentIntervalIndex);
+        currentIntervalPart = wheelUi.WheelParts[currentIntervalIndex];
+            
+        PlayBaseAndInterval();
+    }
+
+    private void OnIncludeIntervalsToggled(bool newValue)
+    {
+        includeAllIntervals = newValue;
+        SelectRandomInterval();
     }
 
     private bool OnNoteSelected(object cookie)
     {
         WheelPart wheelPart = (WheelPart)cookie;
-        SelectNote(wheelPart);
+        SelectInterval(wheelPart);
         return true;
     }
 
@@ -63,10 +79,25 @@ public class IntervalState : IState
         return true;
     }
 
-    private void PlayNote()
+    private void PlayBase()
     {
-        wheelUi.AudioSource.clip = currentNote.OctaveNotes[currentOctaveIndex];
-        wheelUi.AudioSource.Play();
+        wheelUi.AudioSourceBase.clip = currentNote.OctaveNotes[currentOctaveIndex];
+        wheelUi.AudioSourceBase.Play();
+    }
+
+    private void PlayInterval()
+    {
+        wheelUi.AudioSourceInterval.clip = currentIntervalNote.OctaveNotes[currentOctaveIndex];
+        wheelUi.AudioSourceInterval.Play();
+    }
+
+    private void PlayBaseAndInterval()
+    {
+        PlayBase();
+        Service.TimerManager.CreateTimer(INTERVAL_PLAY_TIME, (object o) =>
+        {
+            PlayInterval();
+        }, null, null);
     }
 
     private void SwitchState()
@@ -74,31 +105,39 @@ public class IntervalState : IState
         onSwitchState();
     }
 
-    public void SelectNote(WheelPart selectedNote)
+    public void SelectInterval(WheelPart selectedInterval)
     {
-        wheelUi.ReplayButton.gameObject.SetActive(false);
-        bool isCorrect = selectedNote == currentNotePart;
+        wheelUi.ReplayBaseButton.gameObject.SetActive(false);
+        wheelUi.ReplayIntervalButton.gameObject.SetActive(false);
+        int selectedIntervalIndex = wheelUi.WheelParts.IndexOf(selectedInterval);
+        bool isCorrect = selectedIntervalIndex == currentIntervalIndex;
         wheelUi.CorrectLabel.SetActive(isCorrect);
         wheelUi.IncorrectLabel.SetActive(!isCorrect);
-        currentNotePart.SetIsKey(true);
+        currentIntervalPart.SetIsKey(true);
         resultTimeout = RESULT_TIME;
     }
 
-    public void SampleNote(WheelPart selectedNote)
+    public void SampleNote(WheelPart selectedInterval)
+    {
+        int selectedIntervalIndex = wheelUi.WheelParts.IndexOf(selectedInterval);
+        NoteModel tmpModel = GetNodeModelForInterval(currentNote, selectedIntervalIndex);
+        wheelUi.AudioSourceBase.clip = tmpModel.OctaveNotes[currentOctaveIndex];
+        wheelUi.AudioSourceBase.Play();
+    }
+
+    private NoteModel GetNodeModelForInterval(NoteModel baseNote, int interval)
     {
         NoteModel tmpModel = null;
 
-        for (int i = 0, count = noteCollection.NoteModels.Count; i < count; ++i)
+        int noteIndex = noteCollection.NoteModels.IndexOf(currentNote) + interval;
+        int numNotes = noteCollection.NoteModels.Count;
+        if (noteIndex > numNotes - 1)
         {
-            if (noteCollection.NoteModels[i].NoteName == selectedNote.noteLabel.text)
-            {
-                tmpModel = noteCollection.NoteModels[i];
-                break;
-            }
+            noteIndex -= numNotes;
         }
+        tmpModel = noteCollection.NoteModels[noteIndex];
 
-        wheelUi.AudioSource.clip = tmpModel.OctaveNotes[currentOctaveIndex];
-        wheelUi.AudioSource.Play();
+        return tmpModel;
     }
 
     private void OnUpdate(float dt)
@@ -110,8 +149,9 @@ public class IntervalState : IState
             {
                 wheelUi.CorrectLabel.SetActive(false);
                 wheelUi.IncorrectLabel.SetActive(false);
-                wheelUi.ReplayButton.gameObject.SetActive(true);
-                currentNotePart.SetIsKey(false);
+                wheelUi.ReplayBaseButton.gameObject.SetActive(true);
+                wheelUi.ReplayIntervalButton.gameObject.SetActive(true);
+                currentIntervalPart.SetIsKey(false);
                 SelectRandomInterval();
             }
         }
@@ -119,5 +159,9 @@ public class IntervalState : IState
 
     public void Dispose()
     {
+        GameObject.Destroy(intervalWheel);
+        Service.UpdateManager.RemoveObserver(OnUpdate);
+        Service.EventManager.RemoveListener(EventId.OnNoteSelected, OnNoteSelected);
+        Service.EventManager.RemoveListener(EventId.OnSampleNotePressed, OnSampleNotePressed);
     }
 }

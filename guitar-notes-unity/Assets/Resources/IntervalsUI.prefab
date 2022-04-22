@@ -2111,7 +2111,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: m3
+  m_Text: b3
 --- !u!1 &3426188806256748617
 GameObject:
   m_ObjectHideFlags: 0
@@ -4008,7 +4008,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: D
+  m_Text: b5
 --- !u!1 &3426188806833862703
 GameObject:
   m_ObjectHideFlags: 0
@@ -4568,7 +4568,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A
+  m_Text: '#5'
 --- !u!1 &3426188807049011546
 GameObject:
   m_ObjectHideFlags: 0
@@ -6645,10 +6645,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be95b9cd08a09d14ebe17cd2a4878ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WheelParts: []
+  WheelParts:
+  - {fileID: 3426188806928143569}
+  - {fileID: 3426188807358933756}
+  - {fileID: 3426188806212844548}
+  - {fileID: 3426188807518423895}
+  - {fileID: 3426188807258080676}
+  - {fileID: 3426188807901461600}
+  - {fileID: 3426188807179708071}
+  - {fileID: 3426188807338219246}
+  - {fileID: 3426188806956323403}
+  - {fileID: 3426188808155005760}
+  - {fileID: 3426188807472138409}
+  - {fileID: 3426188807611575923}
   ReplayBaseButton: {fileID: 3349768160787187861}
   ReplayIntervalButton: {fileID: 5267171586013341557}
   SwitchStateButton: {fileID: 3540265364409737090}
+  IncludeAllIntervalsToggle: {fileID: 6310425409074164833}
   AudioSourceBase: {fileID: 6818004638265907145}
   AudioSourceInterval: {fileID: 2572637638926581084}
   CorrectLabel: {fileID: 3426188806695750368}
